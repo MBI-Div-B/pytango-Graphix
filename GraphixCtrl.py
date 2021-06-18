@@ -20,11 +20,7 @@ class GraphixCtrl(Device):
         default_value=38400,
     )
 
-    Address_RS489 = device_property(
-        dtype="int",
-        default_value="-1",
-    )
-
+    # device attributes
     hv_sv = attribute(
         dtype='str',
         access=AttrWriteType.READ,
@@ -124,10 +120,13 @@ class GraphixCtrl(Device):
         res = self.serial.readline().decode("latin1")
         self.debug_stream("read response: {:s}".format(res))
         if self.__ACK in res:
-            return res.lstrip(self.__ACK).rstrip(self.__EOT)[:-1]
-        else:
-            # no acknowledgment in response
-            return self.__NACK
+            response = res.lstrip(self.__ACK).rstrip(self.__EOT)[:-1]
+            if len(response) == 0:  # successful write
+                return "0"
+            else:  # successful read
+                return response
+        else:  # error
+            return res.lstrip(self.__NACK).rstrip(self.__EOT)[:-1]
 
 
 def calc_crc(cmd):
