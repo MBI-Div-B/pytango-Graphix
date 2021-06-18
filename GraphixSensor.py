@@ -48,7 +48,7 @@ class GraphixSensor(Device):
             self.info_stream("Connected to ctrl. device: {:s}".format(self.CtrlDevice))
             self.set_state(DevState.ON)
         except DevFailed as df:
-            self.error_stream("Failed to create proxy to {:s}".format(self.CtrlDevice))
+            self.error_stream("Failed to create proxy {:s}".format(df))
             self.set_state(DevState.OFF)
 
         self.__sensor_type = self.read(4)
@@ -82,6 +82,7 @@ class GraphixSensor(Device):
 
     def write(self, parameter, value):
         return self.ctrl.write("{:d};{:d};{:s}".format(self.Channel, parameter, value))
+
 
 if __name__ == "__main__":
     GraphixSensor.run_server()
