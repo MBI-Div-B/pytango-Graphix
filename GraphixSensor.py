@@ -33,7 +33,7 @@ class GraphixSensor(Device):
     pressure = attribute(
         dtype="float",
         label="Pressure",
-        format="%6.2g",
+        format="%6.2e",
         access=AttrWriteType.READ,
         display_level=DispLevel.OPERATOR,
     )
